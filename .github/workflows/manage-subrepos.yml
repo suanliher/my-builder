@@ -1,0 +1,43 @@
+name: 子仓库管理
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: '操作: create, list, delete'
+        required: true
+        default: 'list'
+      repo_name:
+        description: '子仓库名称（创建或删除时必填）'
+        required: false
+      description:
+        description: '子仓库描述（创建时可选）'
+        required: false
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 调用 GitHub API
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          case "${{ github.event.inputs.action }}" in
+            create)
+              curl -X POST \
+                -H "Authorization: token $GH_TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                -d "{\"name\":\"${{ github.event.inputs.repo_name }}\",\"description\":\"${{ github.event.inputs.description }}\",\"private\":false}" \
+                https://api.github.com/user/repos
+              ;;
+            list)
+              curl -H "Authorization: token $GH_TOKEN" \
+                https://api.github.com/user/repos?per_page=100
+              ;;
+            delete)
+              curl -X DELETE \
+                -H "Authorization: token $GH_TOKEN" \
+                https://api.github.com/repos/$OWNER/${{ github.event.inputs.repo_name }}
+              ;;
+          esac
