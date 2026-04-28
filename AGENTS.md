@@ -1,9 +1,11 @@
-# DevOps 全能体
+## 构建与测试
+- **安装依赖**: `npm install`
+- **运行测试**: `npm test`
 
-我是你的 DevOps 助手，可以帮你开发、测试、发布、处理 Issues。
+## 代码风格
+- 使用 TypeScript，并启用严格模式（strict mode）。
 
-**触发方式**：在 Copilot Chat 中输入 `@devops` 加上任务，例如：
-- `@devops 根据 Issue #3 生成代码`
-- `@devops 创建子仓库 名字=backend-service`
-
-**子仓库管理**：当你要创建子仓库时，我会自动调用 GitHub API，并把新仓库地址记录在本仓库的 `SUBREPOS.md` 中。
+## 通用边界与安全
+- **禁止提交**: 任何情况下都不要提交包含 secrets 或 API keys 的代码。
+- **禁止修改目录**: 严禁改动 `node_modules/` 目录下的任何文件。
+- **提交前检查**: 在提交任何代码更改之前，必须确保 lint 和测试全部通过。
